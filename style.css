@@ -205,7 +205,10 @@ header h1 {
   max-width: 400px;
   box-shadow: 0 0 20px #00000088;
   position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
 }
+
 .cerrarModal {
   position: absolute;
   top: 8px; right: 12px;

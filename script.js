@@ -21,6 +21,7 @@ let ultimaPagina = 1;
 let parametrosBusqueda = {};
 let favoritos = cargarFavoritosLocal();
 
+// ----------------- PRINCIPALES -----------------
 document.getElementById('botonPersonajes').addEventListener('click', () => {
   pagina = 1;
   parametrosBusqueda = {};
@@ -61,6 +62,33 @@ botonLimpiar.addEventListener('click', () => {
   cargarPersonajes();
 });
 
+// --------------- FAVORITOS --------------------
+botonFavoritos.addEventListener('click', () => {
+  mostrarFavoritos();
+});
+
+function alternarFavorito(personaje) {
+  favoritos[personaje.id] = favoritos[personaje.id] ? undefined : personaje;
+  guardarFavoritosLocal();
+}
+function esFavorito(id) {
+  return Boolean(favoritos[id]);
+}
+function guardarFavoritosLocal() {
+  localStorage.setItem('favoritosRM', JSON.stringify(favoritos));
+}
+function cargarFavoritosLocal() {
+  try {
+    return JSON.parse(localStorage.getItem('favoritosRM')) || {};
+  } catch {
+    return {};
+  }
+}
+function obtenerFavoritosComoArray() {
+  return Object.values(favoritos).filter(Boolean);
+}
+
+// -------------- FUNCIONES DE RENDER --------------
 function cargarPersonajes(datosFavoritos = null) {
   mostrarLoader(true);
   contenedorResultados.innerHTML = '';
@@ -118,6 +146,7 @@ function mostrarPersonajes(personajes, esFavoritos = false) {
         ${esFavorito(personaje.id) ? '★' : '☆'}
       </button>
     `;
+    // MODAL DETALLE
     div.addEventListener('click', (e) => {
       if (!e.target.classList.contains('botonFavorito')) {
         mostrarDetalle(personaje.id);
@@ -128,6 +157,7 @@ function mostrarPersonajes(personajes, esFavoritos = false) {
         mostrarDetalle(personaje.id);
       }
     });
+    // FAVORITO
     div.querySelector('.botonFavorito').addEventListener('click', (e) => {
       e.stopPropagation();
       alternarFavorito(personaje);
@@ -170,6 +200,95 @@ function mostrarDetalle(id) {
     });
 }
 
+// ---------- MODAL FAVORITOS ------------
+function mostrarFavoritos() {
+  const lista = obtenerFavoritosComoArray();
+  if (lista.length === 0) {
+    contenidoFavoritos.innerHTML = `<p style="text-align:center;margin:30px 0;">No hay favoritos guardados.<br>¡Marcá personajes con la estrella!</p>`;
+  } else {
+    contenidoFavoritos.innerHTML = '';
+    lista.forEach(personaje => {
+      const div = document.createElement('div');
+      div.classList.add('tarjetaPersonaje');
+      div.innerHTML = `
+        <img src="${personaje.image}" alt="${personaje.name}">
+        <h3>${personaje.name}</h3>
+        <p>Estado: ${personaje.status}</p>
+        <p>Especie: ${personaje.species}</p>
+        <button class="botonFavorito" aria-label="Quitar de favoritos" data-id="${personaje.id}" tabindex="0">★</button>
+      `;
+      div.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('botonFavorito')) {
+          mostrarDetalle(personaje.id);
+        }
+      });
+      div.querySelector('.botonFavorito').addEventListener('click', (e) => {
+        e.stopPropagation();
+        alternarFavorito(personaje);
+        mostrarFavoritos();
+      });
+      contenidoFavoritos.appendChild(div);
+    });
+  }
+  modalFavoritos.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    modalFavoritos.focus();
+  }, 10);
+}
+
+// ----------- MODAL CIERRE (detalle y favoritos) -----------
+cerrarModal.addEventListener('click', cerrarDetalle);
+cerrarFavoritos.addEventListener('click', cerrarFav);
+
+function cerrarDetalle() {
+  modalDetalle.classList.add('oculto');
+  document.body.style.overflow = '';
+}
+function cerrarFav() {
+  modalFavoritos.classList.add('oculto');
+  document.body.style.overflow = '';
+}
+
+// Cerrar modal con ESC o clic fuera
+window.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    cerrarDetalle();
+    cerrarFav();
+  }
+});
+modalDetalle.addEventListener('mousedown', function (e) {
+  if (e.target === modalDetalle) cerrarDetalle();
+});
+modalFavoritos.addEventListener('mousedown', function (e) {
+  if (e.target === modalFavoritos) cerrarFav();
+});
+
+// ---------- Loader, paginación, errores, sin resultados ----------
+function mostrarLoader(mostrar) {
+  loader.classList.toggle('oculto', !mostrar);
+}
+function mostrarPaginacion(info) {
+  ultimaPagina = info.pages;
+  paginaActual.textContent = `Página ${pagina} de ${ultimaPagina}`;
+  paginacion.classList.remove('oculto');
+  botonAnterior.disabled = pagina <= 1;
+  botonSiguiente.disabled = pagina >= ultimaPagina;
+}
+function mostrarError(mensaje) {
+  mensajeError.textContent = mensaje;
+  mensajeError.classList.remove('oculto');
+}
+function mostrarSinResultados() {
+  contenedorResultados.innerHTML = `
+    <div style="width:100%;text-align:center;font-size:1.1em;padding:30px;">
+      ¡No se encontraron personajes con esos filtros! 🛸<br>
+      Probá cambiar los valores y buscar de nuevo.
+    </div>
+  `;
+}
+
+// ---------- MODO OSCURO ----------
 if (localStorage.getItem('modoOscuro') === 'true') {
   document.body.classList.add('modoOscuro');
   botonModoOscuro.textContent = '☀️';
@@ -181,3 +300,6 @@ botonModoOscuro.addEventListener('click', () => {
   botonModoOscuro.textContent = esOscuro ? '☀️' : '🌙';
   localStorage.setItem('modoOscuro', esOscuro);
 });
+
+// ---------- CARGA INICIAL -----------
+cargarPersonajes();
