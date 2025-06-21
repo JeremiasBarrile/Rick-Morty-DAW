@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rick y Morty API</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="estilo.css" />
 </head>
 <body>
   <header>
     <h1>Rick & Morty</h1>
+    <button id="botonModoOscuro" aria-label="Alternar modo oscuro" class="botonModoOscuro">🌙</button>
   </header>
 
   <main class="contenedorPrincipal">
@@ -19,15 +19,18 @@
 
     <div class="contenedorBotones">
       <button id="botonPersonajes">Personajes</button>
-
-      <form id="formularioFiltros">
-        <input type="text" id="filtroNombre" placeholder="Nombre" />
-        <input type="text" id="filtroEstado" placeholder="Estado (alive, dead, unknown)" />
-        <input type="text" id="filtroEspecie" placeholder="Especie" />
-        <input type="text" id="filtroTipo" placeholder="Tipo" />
-        <input type="text" id="filtroGenero" placeholder="Género (male, female, genderless, unknown)" />
-        <button type="submit">Buscar</button>
+      <form id="formularioFiltros" autocomplete="off">
+        <input type="text" id="filtroNombre" placeholder="Nombre" aria-label="Nombre" />
+        <input type="text" id="filtroEstado" placeholder="Estado (alive, dead, unknown)" aria-label="Estado" />
+        <input type="text" id="filtroEspecie" placeholder="Especie" aria-label="Especie" />
+        <input type="text" id="filtroTipo" placeholder="Tipo" aria-label="Tipo" />
+        <input type="text" id="filtroGenero" placeholder="Género (male, female, genderless, unknown)" aria-label="Género" />
+        <div class="filaBotones">
+          <button type="submit" id="botonBuscar">Buscar</button>
+          <button type="button" id="botonLimpiar">Limpiar filtros</button>
+        </div>
       </form>
+      <button id="botonFavoritos" aria-label="Ver favoritos">⭐ Favoritos</button>
     </div>
 
     <div class="imagenPersonaje">
@@ -36,8 +39,29 @@
   </main>
 
   <section id="mensajeError" class="oculto"></section>
-  <section id="contenedorResultados" class="contenedorResultados"></section>
+  <section id="contenedorResultados" class="contenedorResultados" role="list"></section>
+  <div id="paginacion" class="contenedorPaginacion oculto" role="navigation" aria-label="Paginación">
+    <button id="botonAnterior" disabled>Anterior</button>
+    <span id="paginaActual"></span>
+    <button id="botonSiguiente" disabled>Siguiente</button>
+  </div>
+  <div id="loader" class="loader oculto">Cargando...</div>
 
+  <div id="modalDetalle" class="modalDetalle oculto" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="contenidoModal">
+      <button id="cerrarModal" class="cerrarModal" aria-label="Cerrar detalle">✖</button>
+      <div id="contenidoDetalle"></div>
+    </div>
+  </div>
 
+  <div id="modalFavoritos" class="modalDetalle oculto" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="contenidoModal">
+      <button id="cerrarFavoritos" class="cerrarModal" aria-label="Cerrar favoritos">✖</button>
+      <div id="contenidoFavoritos"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
+
