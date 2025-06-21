@@ -169,3 +169,15 @@ function mostrarDetalle(id) {
       });
     });
 }
+
+if (localStorage.getItem('modoOscuro') === 'true') {
+  document.body.classList.add('modoOscuro');
+  botonModoOscuro.textContent = '☀️';
+}
+
+botonModoOscuro.addEventListener('click', () => {
+  document.body.classList.toggle('modoOscuro');
+  const esOscuro = document.body.classList.contains('modoOscuro');
+  botonModoOscuro.textContent = esOscuro ? '☀️' : '🌙';
+  localStorage.setItem('modoOscuro', esOscuro);
+});
