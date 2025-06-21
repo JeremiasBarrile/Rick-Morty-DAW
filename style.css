@@ -1,12 +1,15 @@
 :root {
-  --fondo-principal: #0b7e04;
-  --amarillo: yellow;
-  --azul: #17a2b8;
-  --azul-hover: #138496;
-  --tarjeta-fondo: #fff;
-  --tarjeta-borde: #ddd;
-  --modal-fondo: rgba(0,0,0,0.5);
-  --texto: #222;
+  --fondo-principal: #0b7e04;    /* verde oscuro */
+  --amarillo: #ffff00;           /* amarillo */
+  --azul: #17a2b8;               /* celeste */
+  --azul-hover: #138496;         /* celeste oscuro */
+  --tarjeta-fondo: #ffffff;      /* blanco */
+  --tarjeta-borde: #dddddd;      /* gris claro */
+  --modal-fondo: #00000080;      /* negro con transparencia */
+  --texto: #222222;              /* gris muy oscuro */
+  --favorito: #ffd700;           /* dorado */
+  --favorito-inactivo: #bbbbbb;  /* gris inactivo */
+  --error: #ff3333;              /* rojo */
 }
 
 body {
@@ -20,7 +23,7 @@ body {
 body.modoOscuro {
   --fondo-principal: #181818;
   --tarjeta-fondo: #232323;
-  --tarjeta-borde: #555;
+  --tarjeta-borde: #555555;
   --amarillo: #ffd600;
   --texto: #e4e4e4;
 }
@@ -88,7 +91,7 @@ header h1 {
 .contenedorBotones button,
 .filaBotones button {
   background-color: var(--azul);
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -99,8 +102,8 @@ header h1 {
 }
 
 #botonFavoritos {
-  background-color: gold;
-  color: #222;
+  background-color: var(--favorito);
+  color: #222222;
   font-weight: bold;
 }
 
@@ -128,12 +131,12 @@ header h1 {
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
-  box-shadow: 0 2px 4px #0002;
+  box-shadow: 0 2px 4px #00000022;
   cursor: pointer;
 }
 .tarjetaPersonaje:hover, .tarjetaPersonaje:focus {
   transform: scale(1.04);
-  box-shadow: 0 4px 18px #0003;
+  box-shadow: 0 4px 18px #00000033;
   z-index: 1;
 }
 
@@ -149,12 +152,12 @@ header h1 {
   background: none;
   border: none;
   font-size: 1.4em;
-  color: gold;
+  color: var(--favorito);
   cursor: pointer;
   transition: transform 0.15s;
   z-index: 2;
 }
-.botonFavorito.noFavorito { color: #bbb; }
+.botonFavorito.noFavorito { color: var(--favorito-inactivo); }
 .botonFavorito:hover { transform: scale(1.3); }
 
 .oculto {
@@ -162,7 +165,7 @@ header h1 {
 }
 
 #mensajeError {
-  color: red;
+  color: var(--error);
   font-weight: bold;
   text-align: center;
   margin-top: 20px;
@@ -200,7 +203,7 @@ header h1 {
   padding: 24px 20px 18px 20px;
   width: 90vw;
   max-width: 400px;
-  box-shadow: 0 0 20px #0005;
+  box-shadow: 0 0 20px #00000088;
   position: relative;
 }
 .cerrarModal {
